@@ -1,52 +1,50 @@
 import React from 'react';
+import HeroImage from "../assets/Main/Hero_.jpg";
 
-const AboutUsSection = () => {
+/**
+ * A full-screen hero section for a beauty salon website.
+ *
+ * To use this component:
+ * 1. Make sure you have React and Tailwind CSS set up in your project.
+ * 2. Place the background image (e.g., 'salon-hero-bg.jpg') in your `public` folder.
+ * 3. Update the `backgroundImage` URL in the style attribute below if your image
+ * is located elsewhere.
+ */
+const BeautyHero = () => {
   return (
-    <div className="bg-white py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center lg:items-start lg:space-x-12">
-        {/* Left Content Column */}
-        <div className="lg:w-1/2 mb-8 lg:mb-0">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 leading-tight">
-            Our Story of <br />
-            <span className="text-orange-500">Culinary Excellence</span>
-          </h2>
-          <p className="mt-4 text-gray-600">
-            Founded with a passion for exceptional dining experiences, FoodHub has been serving delicious, high-quality meals for over two decades. Our journey began with a simple mission: to bring people together through the love of great food.
-          </p>
-          <p className="mt-4 text-gray-600">
-            From our humble beginnings as a small family restaurant to becoming a premier food destination, we've never compromised on quality, freshness, or the authentic flavors that make every meal memorable.
-          </p>
-          {/* Stats Section */}
-          <div className="mt-8 grid grid-cols-2 gap-y-8 gap-x-4 text-center">
-            <div>
-              <p className="text-3xl font-bold text-orange-500">50+</p>
-              <p className="text-gray-500">Expert Chefs</p>
-            </div>
-            <div>
-              <p className="text-3xl font-bold text-orange-500">10k+</p>
-              <p className="text-gray-500">Happy Customers</p>
-            </div>
-            <div>
-              <p className="text-3xl font-bold text-orange-500">25+</p>
-              <p className="text-gray-500">Years Experience</p>
-            </div>
-            <div>
-              <p className="text-3xl font-bold text-orange-500">15+</p>
-              <p className="text-gray-500">Awards Won</p>
-            </div>
+    <div
+      className="relative flex h-screen items-end bg-cover bg-center text-white"
+      style={{ backgroundImage: `url(${HeroImage})` }}
+    >
+      {/* Subtle overlay for better text readability */}
+      <div className="absolute inset-0 bg-black/20" aria-hidden="true"></div>
+
+      {/* Content Container */}
+      <div className="relative z-10 flex h-full w-full flex-col p-8 sm:p-12 md:p-16">
+        {/* Centered informational text */}
+        <div className="flex grow items-center max-w-lg">
+          <div>
+            <p className="text-base md:text-lg">
+              Your glow begins here. Welcome to Lunaria.
+            </p>
+            <a
+              href="#appointment"
+              className="mt-2 inline-block text-base font-medium underline decoration-1 underline-offset-4 transition hover:opacity-80 md:text-lg"
+            >
+              Book an Appointment
+            </a>
           </div>
         </div>
-        {/* Right Image Column */}
-        <div className="lg:w-1/2">
-          <img
-            src="https://i.imgur.com/4f8c32.jpg"
-            alt="A chef preparing food in a kitchen"
-            className="rounded-lg shadow-lg w-full h-auto object-cover"
-          />
+
+        {/* Large headline at the bottom */}
+        <div className="w-full">
+          <h1 className="text-6xl font-bold uppercase tracking-wide sm:text-7xl md:text-8xl lg:text-9xl">
+            Beaxuty Salon
+          </h1>
         </div>
       </div>
     </div>
   );
 };
 
-export default AboutUsSection;
+export default BeautyHero;

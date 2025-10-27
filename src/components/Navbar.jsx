@@ -1,442 +1,168 @@
 import React, { useState, useEffect } from "react";
-import { FaSearch, FaTimes, FaBars } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
-import Logo from "../assets/Backgrounds/Logo.jpg";
+import { Link } from "react-router-dom"; // Import Link from react-router-dom
 
-const Navbar = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [isCasualDiningOpen, setIsCasualDiningOpen] = useState(false);
-  const [isCafesBakeriesOpen, setIsCafesBakeriesOpen] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isMobileCasualDiningOpen, setIsMobileCasualDiningOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
-  const [dropdownTimeout, setDropdownTimeout] = useState(null);
+// --- Helper Components for Icons ---
+const IconMenu = ({ className }) => (
+  <svg className={className} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+  </svg>
+);
 
-  const navigate = useNavigate();
+const IconX = ({ className }) => (
+  <svg className={className} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+  </svg>
+);
 
-  const categories = [
-    { name: "Fast Food", path: "/fast-food" },
-    { name: "Casual Dining", path: "/casual-dining" },
-    { name: "Cafés & Bakeries", path: "/cafes-bakeries" },
-    { name: "Mains", path: "/mains" },
-    { name: "Beverages", path: "/beverages" },
-    { name: "Desserts", path: "/desserts" },
+const IconChevronDown = ({ className }) => (
+  <svg className={className} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+  </svg>
+);
+
+const Header = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
+
+  // Effect to disable scrolling when the mobile menu is open
+  useEffect(() => {
+    document.body.style.overflow = isMenuOpen ? "hidden" : "unset";
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isMenuOpen]);
+
+  const navLinks = [
+    { to: "/", label: "Home" },
+    {
+      label: "Services",
+      dropdown: [
+        { to: "/salons-spas", label: "Salons & Spas" },
+        { to: "/cosmetics-retail", label: "Cosmetics Retail" },
+        { to: "/barber-grooming", label: "Barber & Grooming" },
+      ],
+    },
+    { to: "/gallery", label: "Gallery" },
+    { to: "/about", label: "About Us" },
   ];
 
-  // Handle scroll effect for navbar
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // Handle search navigation
-  const handleSearch = () => {
-    if (searchQuery.trim()) {
-      const match = categories.find((category) =>
-        category.name.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      if (match) {
-        navigate(match.path);
-        setSearchQuery("");
-        setSuggestions([]);
-        setIsSearchOpen(false);
-        setIsMobileMenuOpen(false);
-      } else {
-        navigate("/");
-        setSearchQuery("");
-        setSuggestions([]);
-        setIsSearchOpen(false);
-        setIsMobileMenuOpen(false);
-      }
-    }
-  };
-
-  // Handle Enter key for search
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter" && searchQuery.trim()) {
-      handleSearch();
-    }
-  };
-
-  // Filter suggestions based on input
-  const handleInputChange = (e) => {
-    const query = e.target.value;
-    setSearchQuery(query);
-    if (query.trim()) {
-      const filtered = categories.filter((category) =>
-        category.name.toLowerCase().includes(query.toLowerCase())
-      );
-      setSuggestions(filtered);
-    } else {
-      setSuggestions(categories);
-    }
-  };
-
-  // Handle clicking a suggestion
-  const handleSuggestionClick = (path) => {
-    navigate(path);
-    setSearchQuery("");
-    setSuggestions([]);
-    setIsSearchOpen(false);
-    setIsMobileMenuOpen(false);
-  };
-
-  // Toggle search bar and initialize suggestions
-  const toggleSearch = () => {
-    setIsSearchOpen(!isSearchOpen);
-    if (!isSearchOpen) {
-      setSuggestions(categories);
-    } else {
-      setSearchQuery("");
-      setSuggestions([]);
-    }
-  };
-
-  // Toggle mobile menu
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-    setIsSearchOpen(false);
-  };
-
-  // Toggle mobile Casual Dining sub-menu
-  const toggleMobileCasualDining = () => {
-    setIsMobileCasualDiningOpen(!isMobileCasualDiningOpen);
-  };
-
-  // Handle dropdown with delay
-  const handleMouseEnter = (setter) => {
-    if (dropdownTimeout) {
-      clearTimeout(dropdownTimeout);
-      setDropdownTimeout(null);
-    }
-    setter(true);
-  };
-
-  const handleMouseLeave = (setter) => {
-    const timeout = setTimeout(() => {
-      setter(false);
-    }, 400);
-    setDropdownTimeout(timeout);
-  };
-
   return (
-    <nav
-      className={`fixed top-4 left-1/2 transform -translate-x-1/2 w-[90%] min-w-0 rounded-2xl z-[100] transition-all duration-300 ${
-        isScrolled ? "bg-white/70 shadow-lg backdrop-blur-md" : "bg-white/40 backdrop-blur-sm"
-      }`}
-      style={{ position: "fixed" }} // Explicitly enforce fixed positioning
-    >
-      <div className="container mx-auto px-6 py-4 flex justify-between items-center font-poppins">
-        {/* Logo and Brand Name */}
-        <div className="flex items-center space-x-3">
-          <img src={Logo} alt="FoodHub Logo" className="h-12 rounded-full" />
-          <span className="text-2xl font-extrabold text-orange-600">FoodHub</span>
-        </div>
+    <header className="absolute top-0 left-0 right-0 z-50 font-sans">
+      <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
+        {/* Logo */}
+        <Link to="/" className="text-2xl font-bold uppercase tracking-widest text-white">
+          Lunaria
+        </Link>
 
         {/* Desktop Navigation Links */}
-        <ul className="hidden md:flex items-center space-x-10 text-gray-900 font-semibold text-lg">
-          <li>
-            <Link
-              to="/"
-              className="hover:text-orange-600 transition-colors duration-300 relative group"
-            >
-              Home
-              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-orange-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/fast-food"
-              className="hover:text-orange-600 transition-colors duration-300 relative group"
-            >
-              Fast Food
-              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-orange-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-            </Link>
-          </li>
+        <div className="hidden lg:flex lg:gap-x-10">
+          {navLinks.map((link) => (
+            <div key={link.label} className="relative group">
+              {link.dropdown ? (
+                <>
+                  <button
+                    className="flex items-center text-sm font-medium uppercase tracking-wider text-white transition-colors hover:text-gray-300"
+                  >
+                    {link.label}
+                    <IconChevronDown className="ml-1 h-4 w-4" />
+                  </button>
+                  <div className="absolute left-0 top-full mt-2 hidden w-48 rounded-md bg-stone-700/50 py-2 shadow-lg backdrop-blur-sm group-hover:block">
+                    {link.dropdown.map((subLink) => (
+                      <Link
+                        key={subLink.label}
+                        to={subLink.to}
+                        className="block px-4 py-2 text-sm font-medium uppercase text-white hover:bg-white/10"
+                      >
+                        {subLink.label}
+                      </Link>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <Link
+                  to={link.to}
+                  className="text-sm font-medium uppercase tracking-wider text-white transition-colors hover:text-gray-300"
+                >
+                  {link.label}
+                </Link>
+              )}
+            </div>
+          ))}
+        </div>
 
-          {/* Casual Dining Dropdown */}
-          <li
-            className="relative"
-            onMouseEnter={() => handleMouseEnter(setIsCasualDiningOpen)}
-            onMouseLeave={() => handleMouseLeave(setIsCasualDiningOpen)}
+        {/* Desktop Book Appointment Button */}
+        <div className="hidden lg:flex">
+          <Link
+            to="/booking"
+            className="rounded-md bg-stone-700/50 px-5 py-2.5 text-sm font-semibold text-white shadow-sm backdrop-blur-sm transition-colors hover:bg-stone-600/50"
           >
-            <Link
-              to="/casual-dining"
-              className="hover:text-orange-600 transition-colors duration-300 relative group"
-            >
-              Casual Dining
-              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-orange-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-            </Link>
-            {isCasualDiningOpen && (
-              <ul
-                className="absolute left-0 mt-2 w-56 bg-white shadow-lg rounded-md py-2 z-[101] font-poppins text-gray-900 pointer-events-auto"
-                style={{ top: "100%" }}
-                onMouseEnter={() => handleMouseEnter(setIsCasualDiningOpen)}
-                onMouseLeave={() => handleMouseLeave(setIsCasualDiningOpen)}
-              >
-                <li>
-                  <Link
-                    to="/starters"
-                    className="block px-5 py-2 text-gray-900 hover:text-orange-600 transition-colors duration-300"
-                  >
-                    Starters
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/mains"
-                    className="block px-5 py-2 text-gray-900 hover:text-orange-600 transition-colors duration-300"
-                  >
-                    Mains
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/beverages"
-                    className="block px-5 py-2 text-gray-900 hover:text-orange-600 transition-colors duration-300"
-                  >
-                    Beverages
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/desserts"
-                    className="block px-5 py-2 text-gray-900 hover:text-orange-600 transition-colors duration-300"
-                  >
-                    Desserts
-                  </Link>
-                </li>
-              </ul>
-            )}
-          </li>
+            Book an Appointment
+          </Link>
+        </div>
 
-          {/* Cafés & Bakeries */}
-          <li
-            className="relative"
-            onMouseEnter={() => handleMouseEnter(setIsCafesBakeriesOpen)}
-            onMouseLeave={() => handleMouseLeave(setIsCafesBakeriesOpen)}
-          >
-            <Link
-              to="/cafes-bakeries"
-              className="hover:text-orange-600 transition-colors duration-300 relative group"
-            >
-              Cafés & Bakeries
-              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-orange-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-            </Link>
-          </li>
-
-          <li>
-            <Link
-              to="/our-chefs"
-              className="hover:text-orange-600 transition-colors duration-300 relative group"
-              onClick={() => window.scrollTo(0, 0)} // Force scroll to top on click
-            >
-              Our Chefs
-              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-orange-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/food-gallery"
-              className="hover:text-orange-600 transition-colors duration-300 relative group"
-            >
-              Gallery
-              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-orange-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/about"
-              className="hover:text-orange-600 transition-colors duration-300 relative group"
-            >
-              About
-              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-orange-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-            </Link>
-          </li>
-          {/* <li>
-            <Link
-              to="/contact"
-              className="hover:text-orange-600 transition-colors duration-300 relative group"
-            >
-              Contact
-              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-orange-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></span>
-            </Link>
-          </li> */}
-        </ul>
-
-        {/* Mobile Menu Button and Search Button */}
-        <div className="flex items-center space-x-4">
+        {/* Mobile Menu Button */}
+        <div className="flex lg:hidden">
           <button
-            onClick={toggleSearch}
-            className="text-gray-900 hover:text-orange-600 transition-colors duration-300 focus:outline-none text-xl"
-            aria-label={isSearchOpen ? "Close search" : "Open search"}
+            type="button"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="inline-flex items-center justify-center rounded-md p-2 text-white"
           >
-            {isSearchOpen ? <FaTimes className="h-6 w-6" /> : <FaSearch className="h-6 w-6" />}
-          </button>
-          <button
-            className="md:hidden text-gray-900 hover:text-orange-600 transition-colors duration-300 focus:outline-none text-xl"
-            onClick={toggleMobileMenu}
-            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
-          >
-            {isMobileMenuOpen ? <FaTimes className="h-6 w-6" /> : <FaBars className="h-6 w-6" />}
+            <span className="sr-only">Open main menu</span>
+            {isMenuOpen ? <IconX className="h-6 w-6" /> : <IconMenu className="h-6 w-6" />}
           </button>
         </div>
-      </div>
+      </nav>
 
       {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden fixed top-[4.5rem] left-1/2 transform -translate-x-1/2 w-[90%] bg-white/70 backdrop-blur-md rounded-lg shadow-lg z-[100]">
-          <ul className="flex flex-col items-start p-6 text-gray-900 font-semibold text-lg font-poppins">
-            <li className="w-full">
-              <Link
-                to="/"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="block py-2 hover:text-orange-600 transition-colors duration-300"
-              >
-                Home
-              </Link>
-            </li>
-            <li className="w-full">
-              <Link
-                to="/fast-food"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="block py-2 hover:text-orange-600 transition-colors duration-300"
-              >
-                Fast Food
-              </Link>
-            </li>
-            <li className="w-full">
-              <button
-                onClick={toggleMobileCasualDining}
-                className="flex justify-between items-center w-full py-2 hover:text-orange-600 transition-colors duration-300"
-              >
-                Casual Dining
-                <span>{isMobileCasualDiningOpen ? "−" : "+"}</span>
-              </button>
-              {isMobileCasualDiningOpen && (
-                <ul className="pl-4 mt-2">
-                  <li>
-                    <Link
-                      to="/starters"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="block py-2 text-gray-900 hover:text-orange-600 transition-colors duration-300"
+      {isMenuOpen && (
+        <div className="lg:hidden">
+          <div className="space-y-4 px-6 pb-8 pt-2">
+            {navLinks.map((link) => (
+              <div key={link.label}>
+                {link.dropdown ? (
+                  <>
+                    <button
+                      onClick={() => setIsServicesDropdownOpen(!isServicesDropdownOpen)}
+                      className="flex w-full items-center justify-center rounded-lg py-2 text-base font-semibold uppercase leading-7 text-white hover:bg-white/10"
                     >
-                      Starters
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/mains"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="block py-2 text-gray-900 hover:text-orange-600 transition-colors duration-300"
-                    >
-                      Mains
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/beverages"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="block py-2 text-gray-900 hover:text-orange-600 transition-colors duration-300"
-                    >
-                      Beverages
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/desserts"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="block py-2 text-gray-900 hover:text-orange-600 transition-colors duration-300"
-                    >
-                      Desserts
-                    </Link>
-                  </li>
-                </ul>
-              )}
-            </li>
-            <li className="w-full">
-              <Link
-                to="/cafes-bakeries"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="block py-2 hover:text-orange-600 transition-colors duration-300"
-              >
-                Cafés & Bakeries
-              </Link>
-            </li>
-            <li className="w-full">
-              <Link
-                to="/our-chefs"
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  window.scrollTo(0, 0); // Force scroll to top
-                }}
-                className="block py-2 hover:text-orange-600 transition-colors duration-300"
-              >
-                Our Chefs
-              </Link>
-            </li>
-            <li className="w-full">
-              <Link
-                to="/food-gallery"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="block py-2 hover:text-orange-600 transition-colors duration-300"
-              >
-                Gallery
-              </Link>
-            </li>
-            <li className="w-full">
-              <Link
-                to="/about"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="block py-2 hover:text-orange-600 transition-colors duration-300"
-              >
-                About
-              </Link>
-            </li>
-            {/* <li className="w-full">
-              <Link
-                to="/contact"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="block py-2 hover:text-orange-600 transition-colors duration-300"
-              >
-                Contact
-              </Link>
-            </li> */}
-          </ul>
-        </div>
-      )}
-
-      {/* Search Bar and Dropdown */}
-      {isSearchOpen && (
-        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 w-[90%] max-w-md z-[100] md:top-28">
-          <input
-            type="text"
-            placeholder="Search menu..."
-            value={searchQuery}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-            className="w-full px-5 py-3 rounded-t-lg bg-white/70 backdrop-blur-md border border-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-600 transition-all duration-300 text-lg font-poppins text-gray-900 placeholder-gray-500"
-          />
-          <ul className="bg-white/70 backdrop-blur-md rounded-b-lg shadow-lg py-2 max-h-64 overflow-y-auto">
-            {suggestions.map((category, index) => (
-              <li
-                key={index}
-                onClick={() => handleSuggestionClick(category.path)}
-                className="px-5 py-2 text-gray-900 hover:bg-orange-600 hover:text-white transition-colors duration-300 cursor-pointer font-poppins text-base"
-              >
-                {category.name}
-              </li>
+                      {link.label}
+                      <IconChevronDown className={`ml-2 h-5 w-5 transition-transform ${isServicesDropdownOpen ? "rotate-180" : ""}`} />
+                    </button>
+                    {isServicesDropdownOpen && (
+                      <div className="mt-2 space-y-2 pl-4">
+                        {link.dropdown.map((subLink) => (
+                          <Link
+                            key={subLink.label}
+                            to={subLink.to}
+                            className="block rounded-lg py-2 text-base font-medium uppercase leading-7 text-white hover:bg-white/10"
+                          >
+                            {subLink.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <Link
+                    to={link.to}
+                    className="block rounded-lg py-2 text-base font-semibold uppercase leading-7 text-white hover:bg-white/10 text-center"
+                  >
+                    {link.label}
+                  </Link>
+                )}
+              </div>
             ))}
-          </ul>
+            <Link
+              to="/booking"
+              className="block rounded-lg py-3 text-base font-semibold uppercase leading-7 text-white hover:bg-white/10 text-center bg-stone-700/50 backdrop-blur-sm"
+            >
+              Book an Appointment
+            </Link>
+          </div>
         </div>
       )}
-    </nav>
+    </header>
   );
 };
 
-export default Navbar;
+export default Header;

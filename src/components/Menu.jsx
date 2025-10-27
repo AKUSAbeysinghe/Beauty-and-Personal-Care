@@ -1,90 +1,100 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import FastFood from "../assets/Foods/Food1.jpg";
-import CasualDining from "../assets/Foods/Spagati.jpg";
-import Cafe from "../assets/Foods/Bakery.jpg";
+import BodyTreatment from "../assets/Menu/BodyThreatment.jpg";
+import HairTreatment from "../assets/Menu/Hair.jpg";
+import SkinCare from "../assets/Menu/SkinCare.jpg";
 
-const menuCategories = [
+// Data for the service cards.
+// Replace image URLs with the paths to your actual images.
+const services = [
   {
-    image: FastFood,
-    category: 'Fast Food Classics',
-    description: 'Comfort food favorites and quick bites',
-    dishes: 15,
-    priceRange: '$8 - $18',
-    path: '/fast-food',
+    name: 'SKIN CARE',
+    count: '24 services',
+    imageUrl: SkinCare, // Example path
+    href: '#skin-care',
   },
   {
-    image: CasualDining,
-    category: 'Casual Dining',
-    description: 'Hearty meals perfect for family gatherings',
-    dishes: 24,
-    priceRange: '$15 - $32',
-    path: '/casual-dining',
+    name: 'BODY RITUALS',
+    count: '18 services',
+    imageUrl: BodyTreatment, // Example path
+    href: '#body-rituals',
   },
   {
-    image: Cafe,
-    category: 'Café & Bakery',
-    description: 'Artisan coffee, pastries and light meals',
-    dishes: 18,
-    priceRange: '$4 - $16',
-    path: '/cafes-bakeries',
+    name: 'HAIR TREATMENTS',
+    count: '12 services',
+    imageUrl: HairTreatment, // Example path
+    href: '#hair-treatments',
   },
 ];
 
-const MenuSection = () => {
+// A simple X icon component
+const IconX = ({ className }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={1.5}
+    stroke="currentColor"
+    className={className}
+  >
+    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+  </svg>
+);
+
+
+const ServicesSection = () => {
   return (
-    <div className="bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="text-center mb-10">
-        <h2 className="text-4xl md:text-5xl font-bold text-gray-800 font-josefin tracking-wide">Our Menu Categories</h2>
-        <p className="mt-2 text-gray-600 text-lg font-lora leading-relaxed">
-          Explore our diverse selection of carefully crafted dishes across different dining styles
-        </p>
-      </div>
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {menuCategories.map((item, index) => (
-          <div key={index} className="bg-white rounded-lg shadow-lg overflow-hidden">
-            <div className="relative">
-              <img
-                src={item.image}
-                alt={item.category}
-                className="w-full h-64 object-cover"
-              />
-              <div className="absolute top-2 right-2 bg-black bg-opacity-50 text-white text-sm font-lora font-semibold px-2 py-1 rounded-full">
-                {item.dishes} dishes
+    <section className="bg-gray-50 font-sans">
+      <div className="mx-auto max-w-7xl py-16 px-4 text-center sm:py-24 sm:px-6 lg:px-8">
+        {/* Section Heading */}
+        <h2 className="text-3xl font-extrabold uppercase tracking-widest text-black sm:text-4xl">
+          Our Services
+        </h2>
+
+        {/* Services Grid */}
+        <div className="mx-auto mt-12 grid max-w-lg gap-8 md:max-w-none md:grid-cols-2 lg:grid-cols-3">
+          {services.map((service) => (
+            <a
+              key={service.name}
+              href={service.href}
+              className="group relative block overflow-hidden"
+            >
+              <div className="aspect-w-1 aspect-h-1">
+                <img
+                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  src={service.imageUrl}
+                  alt={`Image for ${service.name}`}
+                />
               </div>
-              <div className="absolute bottom-2 left-2 bg-black bg-opacity-50 text-white text-sm font-lora font-semibold px-2 py-1 rounded-full">
-                {item.priceRange}
+
+              {/* Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+
+              {/* Content Overlay */}
+              <div className="absolute inset-0 flex items-end justify-between p-6 text-white">
+                <div>
+                  <h3 className="text-lg font-bold uppercase">
+                    {service.name}
+                  </h3>
+                  <p className="text-sm text-gray-200">{service.count}</p>
+                </div>
+                <div className="flex h-8 w-8 items-center justify-center rounded-full border border-white/50 bg-white/20 transition-transform group-hover:rotate-90">
+                    <IconX className="h-4 w-4" />
+                </div>
               </div>
-            </div>
-            <div className="p-6">
-              <h3 className="text-2xl font-bold text-gray-800 font-josefin tracking-wide">{item.category}</h3>
-              <p className="mt-2 text-gray-600 text-lg font-lora leading-relaxed">{item.description}</p>
-              <Link
-                to={item.path}
-                className="mt-4 inline-flex items-center text-orange-500 hover:text-orange-600 text-base font-lora transition duration-300"
-              >
-                View Menu
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="ml-2 h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </Link>
-            </div>
-          </div>
-        ))}
+            </a>
+          ))}
+        </div>
+
+        {/* View All Link */}
+        <a
+          href="#all-services"
+          className="mt-16 inline-block text-base font-medium text-black underline underline-offset-4 transition-colors hover:text-gray-600"
+        >
+          View All
+        </a>
       </div>
-    </div>
+    </section>
   );
 };
 
-export default MenuSection;
+export default ServicesSection;

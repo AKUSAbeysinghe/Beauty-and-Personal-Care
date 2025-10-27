@@ -3,25 +3,17 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from "react-route
 
 // Components
 import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import FloatingWhatsApp from "./components/FloatingWhatsApp";
+import Footer from "./components/Footer";
 
 // Pages
 import Home from "./pages/Home";
-import FastFood from "./pages/FastFood";
-import CasualDining from "./pages/CasualDining";
-import CafesBakeries from "./pages/Bakery";
-import Desserts from "./pages/Desserts";
-import Beverages from "./pages/Beverages";
-import Mains from "./pages/Mains";
-import Starters from "./pages/Starts";
-import FoodGallery from "./pages/FoodGalary";
-import Chefs from "./components/OurChefs";
-import About from "./components/About";
-import PrivacyPolicy from "./pages/Privacy";
-import TermsOfService from "./pages/Terms";
-import FAQ from "./pages/FAQ";
+import SalonsSpas from "./pages/Saloon&Spas.jsx"; // Create or import this component
+import BeautyRetail from "./pages/Beautyretail"; // Already exists
+import BarberGrooming from "./pages/Grooming&Barbaring.jsx"; // Create or import this component
+import Gallery from "./pages/Gallery.jsx";
+import About from "./components/OurStory.jsx";
 
 // Admin Pages
 import Login from "./Admin/Login.jsx";
@@ -37,7 +29,7 @@ function Layout({ children }) {
     <div className="bg-white text-black font-sans">
       <ScrollToTop />
       {!hideLayout && <Navbar key={location.pathname} />}
-      <div className="min-h-screen">{children}</div> {/* Ensure content doesn't collapse */}
+      <div className="min-h-screen">{children}</div>
       {!hideLayout && (
         <>
           <Footer />
@@ -54,24 +46,16 @@ function App() {
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/fast-food" element={<FastFood />} />
-          <Route path="/casual-dining" element={<CasualDining />} />
-          <Route path="/cafes-bakeries" element={<CafesBakeries />} />
-          <Route path="/desserts" element={<Desserts />} />
-          <Route path="/beverages" element={<Beverages />} />
-          <Route path="/mains" element={<Mains />} />
-          <Route path="/starters" element={<Starters />} />
-          <Route path="/food-gallery" element={<FoodGallery />} />
-          <Route path="/our-chefs" element={<Chefs />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/terms-of-service" element={<TermsOfService />} />
-          <Route path="/faq" element={<FAQ />} />
+          <Route path="/salons-spas" element={<SalonsSpas />} />
+          <Route path="/cosmetics-retail" element={<BeautyRetail />} />
+          <Route path="/barber-grooming" element={<BarberGrooming />} />
+          <Route path="/About" element={<About />} />
           {/* Admin Pages */}
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
           <Route path="/admin" element={<AdminPanel />} />
           <Route path="/admin-lookbook" element={<LookbookAdmin />} />
+          <Route path="/gallery" element={<Gallery/>} />
         </Routes>
       </Layout>
     </Router>
