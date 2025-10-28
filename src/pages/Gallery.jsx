@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 // Footer and CTA Icons
 const IconMail = ({ className }) => (
@@ -13,18 +13,32 @@ const IconPhone = ({ className }) => (
   </svg>
 );
 
-// Image Data
-const images = {
-  glamour1: 'https://images.unsplash.com/photo-1581338834647-b0fb40704e21?q=80&w=1887&auto=format&fit=crop',
-  glamour2: 'https://images.unsplash.com/photo-1620921937406-3c52a65b7216?q=80&w=1887&auto=format&fit=crop',
-  glamour3: 'https://images.unsplash.com/photo-1528994368334-f8a964a2b97f?q=80&w=1887&auto=format&fit=crop',
-  glamour4: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1887&auto=format&fit=crop',
-  glamour5: 'https://images.unsplash.com/photo-1617124345205-1a14587c664b?q=80&w=1887&auto=format&fit=crop',
-  glamour6: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1964&auto=format&fit=crop',
-  mainProject: 'https://images.unsplash.com/photo-1617922001433-418a1063c16a?q=80&w=1887&auto=format&fit=crop',
-};
-
 const PortfolioPage = () => {
+  const [mainImage, setMainImage] = useState('');
+  const [supportImages, setSupportImages] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchGallery = async () => {
+      try {
+        const res = await fetch('http://localhost/skincare_db/get_gallery_images.php');
+        const data = await res.json();
+
+        const main = data.find(img => img.category === 'main');
+        const supports = data.filter(img => img.category === 'support');
+
+        setMainImage(main?.image_url || 'https://images.unsplash.com/photo-1617922001433-418a1063c16a?q=80&w=1887&auto=format&fit=crop');
+        setSupportImages(supports.map(s => s.image_url));
+        setLoading(false);
+      } catch (err) {
+        console.error("Failed to load gallery:", err);
+        setLoading(false);
+      }
+    };
+
+    fetchGallery();
+  }, []);
+
   const navLinks = [
     { href: '/#about', label: 'About Us' },
     { href: '/#services', label: 'Services' },
@@ -39,78 +53,69 @@ const PortfolioPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#957C62] font-serif text-[#4a4a4a] flex flex-col">
-      {/* Main Content Section with Top Spacing */}
-      <div className="flex flex-col md:flex-row w-full flex-grow pt-16">
-        {/* Left Sidebar Column */}
-        <aside className="w-full md:w-1/3 lg:w-1/4 flex flex-col items-center gap-8 p-8 md:py-16 border-b-2 md:border-b-0 md:border-r-2 border-gray-200 bg-[#957C62]">
-          {/* Top two circular images */}
-          <div className="flex gap-4">
-            <img 
-              src={images.glamour1} 
-              alt="Model in sunglasses" 
-              className="w-28 h-28 rounded-full object-cover shadow-sm" 
-            />
-            <img 
-              src={images.glamour2} 
-              alt="Woman holding a handbag" 
-              className="w-28 h-28 rounded-full object-cover shadow-sm" 
-            />
-          </div>
+    <>
+      {/* Font Import */}
+      <style>
+        {`
+          @font-face {
+            font-family: 'Playfair Display';
+            src: url('/fonts/PlayfairDisplay.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+          }
+          .font-playfair { font-family: 'Playfair Display', serif; }
+        `}
+      </style>
 
-          <h2 className="text-sm tracking-[0.2em] text-white">GLAMOUR FW20/21</h2>
-          
-          {/* Rectangular image */}
-          <img 
-            src={images.glamour3} 
-            alt="Two models in traditional attire" 
-            className="w-52 h-auto object-cover shadow-sm" 
-          />
-          
-          {/* Two vertical images */}
-          <div className="flex gap-4">
-            <img 
-              src={images.glamour4} 
-              alt="Man in black coat in desert" 
-              className="w-28 h-40 object-cover shadow-sm" 
-            />
-            <img 
-              src={images.glamour5} 
-              alt="Man standing near a domed building" 
-              className="w-28 h-40 object-cover shadow-sm" 
-            />
-          </div>
-          
-          {/* Bottom circular image */}
-          <img 
-            src={images.glamour6} 
-            alt="Woman's portrait" 
-              className="w-28 h-28 rounded-full object-cover shadow-sm" 
-            />
-        </aside>
+      <div className="min-h-screen bg-[#1a1a1a] font-playfair text-white flex flex-col">
+        {/* Main Content Section */}
+        <div className="flex flex-col md:flex-row w-full flex-grow pt-16">
+          {/* Left Sidebar */}
+          <aside className="w-full md:w-1/3 lg:w-1/4 flex flex-col items-center gap-8 p-8 md:py-16 border-b-2 md:border-b-0 md:border-r-2 border-gray-700 bg-[#1a1a1a]">
+            {supportImages.slice(0, 6).map((src, i) => {
+              const isCircle = i === 0 || i === 1 || i === 5;
+              const isRect = i === 2;
+              const isTall = i === 3 || i === 4;
 
-        {/* Main Content Area */}
-        <main className="w-full md:w-2/3 lg:w-3/4 flex flex-col items-center justify-between p-8 md:p-16 bg-[#6B4E31]">
-          <h1 className="text-xl tracking-[0.3em] font-light text-white">NEXT PROJECT</h1>
-          
-          {/* Large oval image in the center */}
-          <div className="w-[22rem] h-[32rem] rounded-[50%] overflow-hidden my-8 shadow-md rounded-lg">
-            <img 
-              src={images.mainProject} 
-              alt="Woman in a beige trench coat against a wall of flowers" 
-              className="w-full h-full object-cover" 
-            />
-          </div>
+              return (
+                <img
+                  key={i}
+                  src={src}
+                  alt={`Support ${i + 1}`}
+                  className={`
+                    ${isCircle ? 'w-28 h-28 rounded-full' : ''}
+                    ${isRect ? 'w-52 h-auto' : ''}
+                    ${isTall ? 'w-28 h-40' : ''}
+                    object-cover shadow-lg border-2 border-gray-600
+                  `}
+                />
+              );
+            })}
+            <h2 className="text-sm tracking-[0.3em] text-white mt-4">GLAMOUR FW20/21</h2>
+          </aside>
 
-          <p className="text-base tracking-[0.3em] font-light text-white">SAAZGRAM@GMAIL.COM</p>
-        </main>
+          {/* Main Content Area */}
+          <main className="w-full md:w-2/3 lg:w-3/4 flex flex-col items-center justify-between p-8 md:p-16 bg-[#1a1a1a]">
+            <h1 className="text-2xl tracking-[0.4em] font-light text-white">NEXT PROJECT</h1>
+            
+            {/* Large Oval Main Image */}
+            <div className="w-[22rem] h-[32rem] rounded-[50%] overflow-hidden my-8 shadow-2xl border-4 border-gray-700">
+              {loading ? (
+                <div className="w-full h-full bg-gray-800 animate-pulse" />
+              ) : (
+                <img 
+                  src={mainImage} 
+                  alt="Main Project" 
+                  className="w-full h-full object-cover"
+                />
+              )}
+            </div>
+
+            <p className="text-base tracking-[0.3em] font-light text-white">SAAZGRAM@GMAIL.COM</p>
+          </main>
+        </div>
       </div>
-
-    
-
-      
-
-    </div>
+    </>
   );
 };
 
