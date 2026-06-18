@@ -1,16 +1,10 @@
 import React from 'react';
 import HeroImage from "../assets/Main/Hero_.jpg";
 
-/**
- * A full-screen hero section for a beauty salon website.
- *
- * To use this component:
- * 1. Make sure you have React and Tailwind CSS set up in your project.
- * 2. Place the background image (e.g., 'salon-hero-bg.jpg') in your `public` folder.
- * 3. Update the `backgroundImage` URL in the style attribute below if your image
- * is located elsewhere.
- */
 const BeautyHero = () => {
+  const whatsappNumber = "94771234567"; // Remove + sign and spaces
+  const whatsappLink = `https://wa.me/${whatsappNumber}?text=Hi%20Lunaria,%20I%20would%20like%20to%20book%20an%20appointment`;
+
   return (
     <div
       className="relative flex h-screen items-end bg-cover bg-center text-white"
@@ -27,8 +21,12 @@ const BeautyHero = () => {
             <p className="text-base md:text-lg">
               Your glow begins here. Welcome to Lunaria.
             </p>
+            
+            {/* Updated WhatsApp Button */}
             <a
-              href="#appointment"
+              href={whatsappLink}
+              target="_blank"
+              rel="noopener noreferrer"
               className="mt-2 inline-block text-base font-medium underline decoration-1 underline-offset-4 transition hover:opacity-80 md:text-lg"
             >
               Book an Appointment
@@ -39,7 +37,7 @@ const BeautyHero = () => {
         {/* Large headline at the bottom */}
         <div className="w-full">
           <h1 className="text-6xl font-bold uppercase tracking-wide sm:text-7xl md:text-8xl lg:text-9xl">
-            Beaxuty Salon
+            Beauty Salon
           </h1>
         </div>
       </div>

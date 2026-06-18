@@ -63,6 +63,9 @@ const Header = () => {
     setIsServicesDropdownOpen(false);
   };
 
+  const whatsappNumber = "94771234567"; // Remove + and spaces
+  const whatsappLink = `https://wa.me/${whatsappNumber}?text=Hi%20Lunaria,%20I%20would%20like%20to%20book%20an%20appointment`;
+
   return (
     <header className="absolute top-0 left-0 right-0 z-50 font-sans">
       <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
@@ -112,14 +115,16 @@ const Header = () => {
           ))}
         </div>
 
-        {/* Desktop Book Appointment Button */}
+        {/* Desktop Book Appointment Button - Now WhatsApp */}
         <div className="hidden lg:flex">
-          <Link
-            to="/booking"
+          <a
+            href={whatsappLink}
+            target="_blank"
+            rel="noopener noreferrer"
             className="rounded-md bg-stone-700/50 px-5 py-2.5 text-sm font-semibold text-white shadow-sm backdrop-blur-sm transition-colors hover:bg-stone-600/50"
           >
             Book an Appointment
-          </Link>
+          </a>
         </div>
 
         {/* Mobile Menu Button */}
@@ -179,14 +184,16 @@ const Header = () => {
                 </div>
               ))}
 
-              {/* Book Appointment Button in Mobile */}
-              <Link
-                to="/booking"
+              {/* Book Appointment Button in Mobile - Now WhatsApp */}
+              <a
+                href={whatsappLink}
+                target="_blank"
+                rel="noopener noreferrer"
                 onClick={closeMobileMenu}
                 className="mt-8 block w-full rounded-xl bg-stone-700 py-4 text-center text-lg font-semibold uppercase tracking-wider text-white hover:bg-stone-600 transition-colors"
               >
                 Book an Appointment
-              </Link>
+              </a>
             </div>
           </div>
         </div>
