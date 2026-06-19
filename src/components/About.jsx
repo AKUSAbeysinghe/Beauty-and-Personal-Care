@@ -49,13 +49,8 @@ const AboutSection = () => {
         </p>
 
         {/* Read More Link */}
-        <a
-          href="#"
-          className="mt-10 inline-block text-base font-medium tracking-wide text-black underline underline-offset-4 transition-colors hover:text-gray-600"
-        >
-          Read More
-        </a>
-      </div>
+       
+      </div> 
     </section>
   );
 };

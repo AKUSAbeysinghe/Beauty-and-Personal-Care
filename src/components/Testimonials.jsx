@@ -104,10 +104,10 @@ const TestimonialsSection = () => {
             <span className="block h-2 w-2 rounded-full bg-gray-300"></span>
             <span className="block h-2 w-2 rounded-full bg-gray-300"></span>
           </div>
-          <button className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-300 text-black transition-colors hover:bg-gray-100">
+          {/* <button className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-300 text-black transition-colors hover:bg-gray-100">
             <span className="sr-only">Next testimonial</span>
             <IconArrowRight className="h-5 w-5" />
-          </button>
+          </button> */}
         </div>
       </div>
     </section>

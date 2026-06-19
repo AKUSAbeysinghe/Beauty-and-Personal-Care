@@ -118,3 +118,10 @@ ON DUPLICATE KEY UPDATE
 -- SUCCESS MESSAGE
 -- =============================================
 SELECT '✅ Database skincare_db has been successfully dropped and recreated!' AS message;
+
+
+
+
+
+ALTER TABLE subcategories
+ADD COLUMN image_url VARCHAR(255) NULL;

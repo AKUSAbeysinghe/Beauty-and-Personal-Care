@@ -16,9 +16,9 @@ const IconPhone = ({ className }) => (
 const Footer = () => {
   const navLinks = [
     { href: '/about', label: 'About Us' },
-    { href: '#services', label: 'Services' },
-    { href: '#blog', label: 'Blog' },
-    { href: '#contacts', label: 'Contacts' },
+    { href: '/barber-grooming', label: 'barber-grooming' },
+    { href: '/cosmetics-retail', label: 'cosmetics-retail' },
+    { href: '/salons-spas', label: 'salons-spas' },
   ];
 
   const socialLinks = [

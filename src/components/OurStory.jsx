@@ -58,12 +58,7 @@ const LunariaStorySection = () => {
             </div>
           </div>
 
-          <a
-            href="#read-more"
-            className="mt-10 inline-block text-base font-medium tracking-wide text-white underline underline-offset-4 transition-colors hover:text-gray-300"
-          >
-            Read More
-          </a>
+        
         </div>
       
       </div>

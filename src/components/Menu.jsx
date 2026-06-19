@@ -85,13 +85,7 @@ const ServicesSection = () => {
           ))}
         </div>
 
-        {/* View All Link */}
-        <a
-          href="#all-services"
-          className="mt-16 inline-block text-base font-medium text-black underline underline-offset-4 transition-colors hover:text-gray-600"
-        >
-          View All
-        </a>
+       
       </div>
     </section>
   );

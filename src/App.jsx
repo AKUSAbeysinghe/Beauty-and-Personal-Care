@@ -19,7 +19,8 @@ import About from "./components/OurStory.jsx";
 import Login from "./Admin/Login.jsx";
 import SignUp from "./Admin/SignUp.jsx";
 import AdminPanel from "./Admin/AdminPanel.jsx";
-import LookbookAdmin from "./Admin/LookbookAdmin.jsx";
+import ServicesPage from "./components/Services.jsx";
+
 
 function Layout({ children }) {
   const location = useLocation();
@@ -54,8 +55,8 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login />} />
           <Route path="/admin" element={<AdminPanel />} />
-          <Route path="/admin-lookbook" element={<LookbookAdmin />} />
           <Route path="/gallery" element={<Gallery/>} />
+          <Route path="/services" element={<ServicesPage/>} />
         </Routes>
       </Layout>
     </Router>
