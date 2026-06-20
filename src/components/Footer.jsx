@@ -27,6 +27,9 @@ const Footer = () => {
     { href: 'https://twitter.com/lunaria', label: 'Twitter' },
   ];
 
+  // WhatsApp number (using the same number shown in contact section)
+  const whatsappNumber = '1234567890'; // ← Change this to your real number (with country code, no + or spaces)
+
   return (
     <footer className="relative bg-stone-900/90 text-white">
       {/* Subtle overlay for consistency with hero */}
@@ -98,11 +101,15 @@ const Footer = () => {
                 </li>
               ))}
             </ul>
+            
+            {/* Updated WhatsApp Button */}
             <a
-              href="#booking"
+              href={`https://wa.me/${whatsappNumber}`}
+              target="_blank"
+              rel="noopener noreferrer"
               className="mt-6 inline-block rounded-md bg-stone-700/50 px-5 py-2.5 text-sm font-semibold uppercase text-white shadow-sm backdrop-blur-sm transition-colors hover:bg-stone-600/50"
             >
-              Book an Appointment
+              Book on WhatsApp
             </a>
           </div>
         </div>
